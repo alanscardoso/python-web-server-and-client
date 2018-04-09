@@ -1,19 +1,8 @@
-
-# coding: utf-8
-
-# In[ ]:
-
 import os
 import socket
+import argparse
 
-host = '0.0.0.0'
-port = 13000
 MAX_PACKET = 2048
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((host, port))
-server.listen(1)
-
 
 def handle_client(client):
     request = client.recv(MAX_PACKET)
@@ -44,10 +33,6 @@ def handle_client(client):
     
     if is_ok:
         files = os.listdir()
-
-        if method != 'GET':
-            #TODO avisar qual método é suportado
-            return
 
         if file == '/':
             if 'index.html' in files:
@@ -115,14 +100,17 @@ def handle_client(client):
         print(e)
 
 def run():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('host')
+    parser.add_argument('port')
+    args = parser.parse_args()
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((args.host, int(args.port)))
+    server.listen(1)
+    
     while True:
         client, address = server.accept()
         handle_client(client)
         
 run()
-
-
-# In[ ]:
-
-
-
