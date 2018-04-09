@@ -13,33 +13,44 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.connect((host, port))
 server.send(request)
 
-total_data = [];
-data = '';
-timeout = 2
-begin = time.time()
+def write_file(file_name, content):
+    html = ''
+    for i in range(1,len(content)):
+        html += content[i]
 
-while True:
-    if time.time() - begin > timeout:
-        break
+    file = open(file_name, 'w')
 
-    try:
-        data = server.recv(MAX_PACKET).decode('utf8')
-        if data:
-            total_data.append(data)
-            begin = time.time()
-    except:
-        pass
+    for i in html:
+        file.write(i)
+        
+    file.close()
 
-server.close()
+def handle_server(server):
+    total_data = [];
+    data = '';
+    timeout = 2
+    begin = time.time()
 
-result = ''.join(total_data).split('\n\n')
+    while True:
+        if time.time() - begin > timeout:
+            break
 
-html = ''
-for i in range(1,len(result)):
-    html += result[i]
+        try:
+            data = server.recv(MAX_PACKET).decode('utf8')
+            if data:
+                total_data.append(data)
+                begin = time.time()
+        except:
+            pass
 
-file = open(file_name, 'w')
+    server.close()
 
-for i in html:
-    file.write(i)
-file.close()
+    content = ''.join(total_data).split('\n\n')
+
+    write_file(file_name, content)
+    
+
+def run():
+    handle_server(server)
+
+run()
