@@ -1,5 +1,6 @@
 
 import os
+import sys
 import time
 import socket
 import argparse
@@ -64,6 +65,7 @@ def write_file(file_name, content):
         file.write(i)
 
     file.close()
+    print('Arquivo gerado')
 
 def handle_server(server):
     """ recebe os dados do servidor """
@@ -109,9 +111,16 @@ def main():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.connect((host, int(port)))
     server.send(request)
-
     # recupera dados da pagina e salva em um arquivo
     content = handle_server(server)
+    #print(content)
+    status = content[0].split(' ')[1]
+    print('Status da requisição: ' + str(status))
+    # se nao houve erro o arquivo e gerado
+    if status != '200':
+        print('Houve um erro e o arquivo não foi gerado')
+        sys.exit()
+	
     write_file(args.file_name, content)
 
 if __name__ == '__main__':

@@ -142,6 +142,8 @@ def main():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((args.host, int(args.port)))
     server.listen(1) # permite apenas uma conexao por vez, esse parametro pode ser aumentado
+	
+    print('Server running...')
     
     while True:
         client, address = server.accept()
