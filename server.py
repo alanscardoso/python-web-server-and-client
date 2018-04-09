@@ -7,7 +7,7 @@ MAX_PACKET = 2048
 def handle_client(client):
     request = client.recv(MAX_PACKET)
     request = request.decode('utf8')
-    is_ok = True
+    is_request_ok = True
     status = ''
     content_type = ''
     response = ''
@@ -15,8 +15,25 @@ def handle_client(client):
     try:
         method = request.split(' ')[0]
         file = request.split(' ')[1]
+
+        if method != 'GET':
+            is_request_ok = False
+            status = 'HTTP/1.1 400 ERROR\n'
+            contet_type = 'Content-Type: text/html\n'
+            
+            response = """
+                <!DOCTYPE html>
+                <html lang='pt-br'>
+                <meta charset="UTF-8">
+                <body>
+                <h1>400 bad request</h1>
+                Apenas o metodo GET e suportado
+                </body>
+                </html>
+            """.encode('utf8')
+
     except:
-        is_ok = False
+        is_request_ok = False
         status = 'HTTP/1.1 400 ERROR\n'
         contet_type = 'Content-Type: text/html\n'
         
@@ -31,7 +48,7 @@ def handle_client(client):
         """.encode('utf8')
         print(request)
     
-    if is_ok:
+    if is_request_ok:
         files = os.listdir()
 
         if file == '/':
