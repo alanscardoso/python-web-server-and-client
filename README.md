@@ -1,15 +1,15 @@
-#Client
+# Client
 
-###How to run:
+### How to run:
 python client.py <url> <file>
 
 example:
 python client.py http://www.site.com.br:13000 result.html
 
 
-#Server
+# Server
 
-###How to run:
+### How to run:
 python server.py <host> <port>
 
 example:
