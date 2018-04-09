@@ -43,7 +43,7 @@ def handle_server(server):
     return content
     
 
-def run():
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('host')
     parser.add_argument('port')
@@ -60,4 +60,5 @@ def run():
     content = handle_server(server)
     write_file(args.file_name, content)
 
-run()
+if __name__ == '__main__':
+    main()

@@ -99,7 +99,7 @@ def handle_client(client):
     except Exception as e:
         print(e)
 
-def run():
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('host')
     parser.add_argument('port')
@@ -113,4 +113,5 @@ def run():
         client, address = server.accept()
         handle_client(client)
         
-run()
+if __name__ == '__main__':
+    main()
